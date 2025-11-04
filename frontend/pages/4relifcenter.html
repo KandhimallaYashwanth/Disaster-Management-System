@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relief Centers - DisasterAlert</title>
+    <meta name="description" content="Find nearby relief centers during disasters" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/css/4relifcenter.css" />
+    <!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+      /* Additional styles for relief centers page */
+      .relief-section {
+        padding: 60px 0;
+        background-color: var(--light-gray);
+      }
+      
+      .map-search-container {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+      
+      .search-filters {
+        background-color: white;
+        padding: 20px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+      }
+      
+      .relief-map {
+        background-color: #e9ecef;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        min-height: 400px;
+        position: relative;
+      }
+      
+      .map-placeholder {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--gray-text);
+        padding: 20px;
+        text-align: center;
+      }
+      
+      .map-placeholder i {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        color: var(--primary-color);
+      }
+      
+      .map-placeholder p {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+      }
+      
+      .map-placeholder span {
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+      
+      .use-location {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      
+      .centers-list {
+        margin-bottom: 40px;
+      }
+      
+      .centers-list h2 {
+        margin-bottom: 20px;
+      }
+      
+      .center-card {
+        display: flex;
+        background-color: white;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--box-shadow);
+        margin-bottom: 20px;
+        transition: var(--transition);
+      }
+      
+      .center-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+      
+      .center-type {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        color: white;
+        padding: 20px;
+        font-weight: 600;
+      }
+      
+      .center-type i {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+      
+      .center-type.shelter {
+        background-color: #2196f3;
+      }
+      
+      .center-type.medical {
+        background-color: #f44336;
+      }
+      
+      .center-type.food {
+        background-color: #4caf50;
+      }
+      
+      .center-details {
+        flex: 1;
+        padding: 20px;
+      }
+      
+      .center-details h3 {
+        margin-bottom: 5px;
+        font-size: 1.3rem;
+      }
+      
+      .center-address {
+        color: var(--gray-text);
+        margin-bottom: 15px;
+      }
+      
+      .center-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+      }
+      
+      .center-meta span {
+        display: flex;
+        align-items: center;
+      }
+      
+      .center-meta i {
+        margin-right: 5px;
+        color: var(--primary-color);
+      }
+      
+      .center-facilities {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+      
+      .facility {
+        background-color: var(--light-gray);
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+      }
+      
+      .facility i {
+        margin-right: 5px;
+      }
+      
+      .center-actions {
+        display: flex;
+        gap: 10px;
+      }
+      
+      .relief-guide {
+        background-color: white;
+        border-radius: var(--border-radius);
+        padding: 30px;
+        box-shadow: var(--box-shadow);
+      }
+      
+      .relief-guide h2 {
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      
+      .guide-items {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 30px;
+      }
+      
+      .guide-item {
+        display: flex;
+        gap: 20px;
+      }
+      
+      .guide-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+      }
+      
+      .guide-content h3 {
+        margin-bottom: 10px;
+      }
+      
+      .guide-content ul {
+        list-style: disc;
+        padding-left: 20px;
+      }
+      
+      .guide-content li {
+        margin-bottom: 5px;
+      }
+      
+      @media (max-width: 991px) {
+        .map-search-container {
+          grid-template-columns: 1fr;
+        }
+        
+        .center-card {
+          flex-direction: column;
+        }
+        
+        .center-type {
+          width: 100%;
+          padding: 10px;
+          flex-direction: row;
+          gap: 10px;
+        }
+        
+        .center-type i {
+          margin-bottom: 0;
+        }
+        
+        .guide-items {
+          grid-template-columns: 1fr;
+        }
+        
+        .guide-item {
+          flex-direction: column;
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Alert Banner -->
+    <div class="alert-banner">
+        <div class="container">
+          <p><i class="fas fa-exclamation-triangle"></i> Flood in Hyderabad • High Alert • 2 hours ago</p>
+          <button class="close-alert"><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Disaster Management System</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="2alerts.html"><i class="fas fa-bell"></i> Alerts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="3report.html"><i class="fas fa-edit"></i> Report</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="4relifcenter.html"><i class="fas fa-map-marker-alt"></i> Relief Centers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="5emergency.html"><i class="fas fa-phone"></i> Emergency Contacts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn-login" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Relief Centers Section -->
+    <section class="relief-section">
+      <div class="container">
+        <h1 class="section-title">Relief Centers</h1>
+        <p class="section-intro">Find information about active relief centers, shelters, and aid distribution points during emergencies.</p>
+        
+        <div class="map-search-container">
+          <div class="search-filters">
+            <div class="form-group">
+              <label for="location-search">Search Location</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input type="text" id="location-search" class="form-control" placeholder="Enter city, district, or pincode">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Facility Type</label>
+              <div class="row g-2 mb-3">
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="shelter" checked>
+                    <label class="form-check-label" for="shelter">Shelters</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="medical" checked>
+                    <label class="form-check-label" for="medical">Medical Camps</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="food" checked>
+                    <label class="form-check-label" for="food">Food Distribution</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="water" checked>
+                    <label class="form-check-label" for="water">Water Supply</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="radius">Distance</label>
+              <select id="radius" class="form-select">
+                <option value="5">Within 5 km</option>
+                <option value="10" selected>Within 10 km</option>
+                <option value="20">Within 20 km</option>
+                <option value="50">Within 50 km</option>
+                <option value="100">Within 100 km</option>
+              </select>
+            </div>
+            
+            <button class="btn btn-primary w-100 mb-2">Search Centers</button>
+            <button class="btn btn-outline-secondary w-100 use-location"><i class="fas fa-location-arrow"></i> Use My Location</button>
+          </div>
+          
+          <div class="relief-map">
+            <!-- Map placeholder - in a real implementation this would be replaced with an actual map -->
+            <div id="map" style="height: 100%; width: 100%;"></div>
+
+          </div>
+        </div>
+        
+        <div class="centers-list">
+          <h2>Nearby Relief Centers</h2>
+          
+          <div class="center-card">
+            <div class="center-type shelter">
+              <i class="fas fa-home"></i>
+              <span>Shelter</span>
+            </div>
+            <div class="center-details">
+              <h3>Government Junior College</h3>
+              <p class="center-address">45 MG Road, Secunderabad, Hyderabad - 500003</p>
+              <div class="center-meta">
+                <span><i class="fas fa-user-friends"></i> Capacity: 600 people</span>
+                <span><i class="fas fa-clock"></i> Open 24 hours</span>
+                <span><i class="fas fa-phone-alt"></i> 040-27841236</span>
+              </div>
+              <div class="center-facilities">
+                <span class="facility"><i class="fas fa-utensils"></i> Food</span>
+                <span class="facility"><i class="fas fa-tint"></i> Water</span>
+                <span class="facility"><i class="fas fa-first-aid"></i> Medical</span>
+                <span class="facility"><i class="fas fa-toilet"></i> Restrooms</span>
+              </div>
+              <div class="center-actions">
+                <a href="#" class="btn btn-primary btn-sm">Get Directions</a>
+                <a href="tel:040-27841236" class="btn btn-outline-secondary btn-sm">Call</a>
+              </div>
+            </div>
+          </div>
+          
+          
+          <div class="center-card">
+            <div class="center-type medical">
+              <i class="fas fa-clinic-medical"></i>
+              <span>Medical</span>
+            </div>
+            <div class="center-details">
+              <h3>Emergency Medical Camp</h3>
+              <p class="center-address">Near Tank Bund, Hussain Sagar, Hyderabad - 500004</p>
+              <div class="center-meta">
+                <span><i class="fas fa-clock"></i> 7:00 AM to 10:00 PM</span>
+                <span><i class="fas fa-phone-alt"></i> 040-24651234</span>
+              </div>
+              <div class="center-facilities">
+                <span class="facility"><i class="fas fa-first-aid"></i> First Aid</span>
+                <span class="facility"><i class="fas fa-pills"></i> Medicines</span>
+                <span class="facility"><i class="fas fa-user-md"></i> Doctors</span>
+              </div>
+              <div class="center-actions">
+                <a href="#" class="btn btn-primary btn-sm">Get Directions</a>
+                <a href="tel:040-24651234" class="btn btn-outline-secondary btn-sm">Call</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="center-card">
+            <div class="center-type food">
+              <i class="fas fa-utensils"></i>
+              <span>Food</span>
+            </div>
+            <div class="center-details">
+              <h3>GHMC Community Kitchen</h3>
+              <p class="center-address">12 Banjara Hills Road, Hyderabad - 500034</p>
+              <div class="center-meta">
+                <span><i class="fas fa-clock"></i> Meals at 7 AM, 12 PM, and 6 PM</span>
+                <span><i class="fas fa-phone-alt"></i> 040-23345678</span>
+              </div>
+              <div class="center-facilities">
+                <span class="facility"><i class="fas fa-utensils"></i> Hot Meals</span>
+                <span class="facility"><i class="fas fa-baby"></i> Baby Food</span>
+                <span class="facility"><i class="fas fa-tint"></i> Drinking Water</span>
+              </div>
+              <div class="center-actions">
+                <a href="#" class="btn btn-primary btn-sm">Get Directions</a>
+                <a href="tel:040-23345678" class="btn btn-outline-secondary btn-sm">Call</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="relief-guide">
+          <h2>Relief Center Guide</h2>
+          <div class="guide-items">
+            <div class="guide-item">
+              <div class="guide-icon">
+                <i class="fas fa-clipboard-list"></i>
+              </div>
+              <div class="guide-content">
+                <h3>What to Bring</h3>
+                <ul>
+                  <li>Essential medications and prescriptions</li>
+                  <li>Identity documents</li>
+                  <li>Change of clothes</li>
+                  <li>Blanket or sleeping bag</li>
+                  <li>Personal hygiene items</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="guide-item">
+              <div class="guide-icon">
+                <i class="fas fa-info-circle"></i>
+              </div>
+              <div class="guide-content">
+                <h3>Important Information</h3>
+                <ul>
+                  <li>Relief centers are free of charge</li>
+                  <li>Pets may not be allowed at all centers</li>
+                  <li>Centers may have limited capacity</li>
+                  <li>Medical aid is basic at shelter facilities</li>
+                  <li>Follow instructions from relief staff</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row footer-content">
+          <div class="col-lg-3 col-md-6 footer-section about">
+            <div class="logo">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>DisasterAlert</h3>
+            </div>
+            <p>A real-time disaster management system helping communities prepare, respond, and recover.</p>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="2alerts.html">Alerts</a></li>
+              <li><a href="3report.html">Report Disaster</a></li>
+              <li><a href="4relifcenter.html">Relief Centers</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section resources">
+            <h3>Resources</h3>
+            <ul>
+              <li><a href="#">Preparedness Guide</a></li>
+              <li><a href="#">Disaster Recovery</a></li>
+              <li><a href="#">Training Materials</a></li>
+              <li><a href="#">Community Resources</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section contact">
+            <h3>Connect</h3>
+            <ul>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#"> About</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#"> Terms of Service</a></li>
+              </ul>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <p>&copy; 20235 DisasterAlert. All rights reserved.</p>
+          <p>Made with <i class="fas fa-heart"></i> for community resilience</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Auth utilities -->
+    <script src="../assets/js/auth.js"></script>
+    <script>
+        // Simple script to close the alert banner
+        document.querySelector('.close-alert').addEventListener('click', function() {
+          document.querySelector('.alert-banner').style.display = 'none';
+        });
+      </script>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          // Initialize the map - set to Hyderabad coordinates
+          var map = L.map('map').setView([17.3850, 78.4867], 12); // Hyderabad coordinates
+      
+          // Add OpenStreetMap tiles
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+          }).addTo(map);
+      
+          // Use Geolocation API
+          const useLocationBtn = document.querySelector('.use-location');
+          useLocationBtn.addEventListener('click', () => {
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(
+                (position) => {
+                  const lat = position.coords.latitude;
+                  const lng = position.coords.longitude;
+      
+                  // Center map to user's location
+                  map.setView([lat, lng], 13);
+                  L.marker([lat, lng]).addTo(map)
+                    .bindPopup("You are here")
+                    .openPopup();
+                },
+                () => {
+                  alert("Unable to retrieve your location.");
+                }
+              );
+            } else {
+              alert("Geolocation is not supported by this browser.");
+            }
+          });
+      
+          // Hyderabad Relief Centers
+          const centers = [
+            {
+              name: "Government Junior College Shelter",
+              lat: 17.4419,
+              lng: 78.4989,
+              type: "Shelter"
+            },
+            {
+              name: "Emergency Medical Camp",
+              lat: 17.4126,
+              lng: 78.4670,
+              type: "Medical"
+            },
+            {
+              name: "GHMC Community Kitchen",
+              lat: 17.4156,
+              lng: 78.4347,
+              type: "Food"
+            }
+          ];
+      
+          centers.forEach(center => {
+            L.marker([center.lat, center.lng]).addTo(map)
+              .bindPopup(`<b>${center.name}</b><br>${center.type} Center`);
+          });
+        });
+      </script>
+      
+  </body>
+</html>
