@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emergency Contacts - DisasterAlert</title>
+    <meta name="description" content="Emergency contacts for disaster response" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/css/5emergency.css" />
+    <style>
+      /* Additional styles for emergency contacts page */
+      .contacts-section {
+        padding: 60px 0;
+        background-color: var(--light-gray);
+      }
+      
+      .contacts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+      
+      .contact-card {
+        background-color: white;
+        border-radius: var(--border-radius);
+        padding: 25px;
+        box-shadow: var(--box-shadow);
+        text-align: center;
+        transition: var(--transition);
+        height: 100%;
+      }
+      
+      .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      }
+      
+      .contact-icon {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+        height: 70px;
+        width: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(52, 152, 219, 0.1);
+        border-radius: 50%;
+        margin: 0 auto 20px;
+      }
+      
+      .contact-card:hover .contact-icon {
+        background-color: var(--primary-color);
+        color: white;
+      }
+      
+      .contact-card h3 {
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+      }
+      
+      .contact-number {
+        display: block;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--danger-color);
+        margin-bottom: 15px;
+        transition: var(--transition);
+      }
+      
+      .contact-number:hover {
+        color: #c0392b;
+        transform: scale(1.05);
+      }
+      
+      .contact-card p {
+        color: var(--gray-text);
+        font-size: 0.95rem;
+      }
+      
+      .emergency-instructions {
+        background-color: white;
+        border-radius: var(--border-radius);
+        padding: 30px;
+        box-shadow: var(--box-shadow);
+      }
+      
+      .emergency-instructions h2 {
+        margin-bottom: 20px;
+        color: var(--danger-color);
+        text-align: center;
+      }
+      
+      .emergency-instructions ul {
+        list-style: none;
+        padding: 0;
+      }
+      
+      .emergency-instructions li {
+        margin-bottom: 15px;
+        color: var(--dark-text);
+        padding-left: 30px;
+        position: relative;
+      }
+      
+      .emergency-instructions li:before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+      
+      @media (max-width: 767px) {
+        .contacts-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Alert Banner -->
+    <div class="alert-banner">
+      <div class="container">
+        <p><i class="fas fa-exclamation-triangle"></i> Flood in Chennai • High Alert • 2 hours ago</p>
+        <button class="close-alert"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Disaster Management System</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="2alerts.html"><i class="fas fa-bell"></i> Alerts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="3report.html"><i class="fas fa-edit"></i> Report</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="4relifcenter.html"><i class="fas fa-map-marker-alt"></i> Relief Centers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="5emergency.html"><i class="fas fa-phone"></i> Emergency Contacts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn-login" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Emergency Contacts Section -->
+    <section class="contacts-section">
+      <div class="container">
+        <h1 class="section-title">Emergency Contacts</h1>
+        <p class="section-intro">Important emergency contact numbers for immediate assistance during disasters and emergency situations.</p>
+        
+        <div class="contacts-grid">
+          <div class="contact-card" data-aos="fade-up">
+            <div class="contact-icon">
+              <i class="fas fa-ambulance"></i>
+            </div>
+            <h3>Medical Emergency</h3>
+            <a href="tel:108" class="contact-number">108</a>
+            <p>For medical emergencies, ambulance services, and immediate medical assistance.</p>
+          </div>
+          
+          <div class="contact-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="contact-icon">
+              <i class="fas fa-fire-extinguisher"></i>
+            </div>
+            <h3>Fire Emergency</h3>
+            <a href="tel:101" class="contact-number">101</a>
+            <p>For fire emergencies, rescue operations, and fire hazard reporting.</p>
+          </div>
+          
+          <div class="contact-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="contact-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Police</h3>
+            <a href="tel:100" class="contact-number">100</a>
+            <p>For police assistance, reporting crimes, and security emergencies.</p>
+          </div>
+          
+          <div class="contact-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="contact-icon">
+              <i class="fas fa-phone-volume"></i>
+            </div>
+            <h3>National Emergency Helpline</h3>
+            <a href="tel:112" class="contact-number">112</a>
+            <p>Single number for all emergency services (police, fire, ambulance).</p>
+          </div>
+          
+          <div class="contact-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="contact-icon">
+              <i class="fas fa-life-ring"></i>
+            </div>
+            <h3>Disaster Management Authority</h3>
+            <a href="tel:1078" class="contact-number">1078</a>
+            <p>National Disaster Management Authority helpline for disaster-related assistance.</p>
+          </div>
+          
+          <div class="contact-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="contact-icon">
+              <i class="fas fa-hands-helping"></i>
+            </div>
+            <h3>Child Helpline</h3>
+            <a href="tel:1098" class="contact-number">1098</a>
+            <p>Emergency helpline for children in distress, especially during disasters.</p>
+          </div>
+          
+          <div class="contact-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="contact-icon">
+              <i class="fas fa-heartbeat"></i>
+            </div>
+            <h3>Blood Bank</h3>
+            <a href="tel:1910" class="contact-number">1910</a>
+            <p>For emergency blood requirements during disasters.</p>
+          </div>
+          
+          <div class="contact-card" data-aos="fade-up" data-aos-delay="400">
+            <div class="contact-icon">
+              <i class="fas fa-tint"></i>
+            </div>
+            <h3>Flood Control Room</h3>
+            <a href="tel:1077" class="contact-number">1077</a>
+            <p>District-level flood control room for flood-related emergencies.</p>
+          </div>
+        </div>
+        
+        <div class="emergency-instructions" data-aos="fade-up">
+          <h2>During an Emergency:</h2>
+          <div class="row">
+            <div class="col-md-6">
+              <ul>
+                <li>Stay calm and provide clear information about your emergency</li>
+                <li>Share your exact location with landmarks if possible</li>
+                <li>Follow instructions provided by emergency personnel</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <ul>
+                <li>Keep emergency numbers saved in your phone and written down in your home</li>
+                <li>If in doubt, call the National Emergency Helpline at 112</li>
+                <li>Try to provide information about the number of people affected</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row footer-content">
+          <div class="col-lg-3 col-md-6 footer-section about">
+            <div class="logo">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>DisasterAlert</h3>
+            </div>
+            <p>A real-time disaster management system helping communities prepare, respond, and recover.</p>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="2alerts.html">Alerts</a></li>
+              <li><a href="3report.html">Report Disaster</a></li>
+              <li><a href="4relifcenter.html">Relief Centers</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section resources">
+            <h3>Resources</h3>
+            <ul>
+              <li><a href="#">Preparedness Guide</a></li>
+              <li><a href="#">Disaster Recovery</a></li>
+              <li><a href="#">Training Materials</a></li>
+              <li><a href="#">Community Resources</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section contact">
+            <h3>Connect</h3>
+            <ul>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#"> About</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#"> Terms of Service</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <p>&copy; 2025 DisasterAlert. All rights reserved.</p>
+          <p>Made with <i class="fas fa-heart"></i> for community resilience</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Auth utilities -->
+    <script src="../assets/js/auth.js"></script>
+    <script>
+      // Simple script to close the alert banner
+      document.querySelector('.close-alert').addEventListener('click', function() {
+        document.querySelector('.alert-banner').style.display = 'none';
+      });
+    </script>
+  </body>
+</html>
