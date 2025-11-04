@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - Disaster Management System</title>
+    <meta name="description" content="Create a new account for Disaster Management System" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/css/6login.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Disaster Management System</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="2alerts.html"><i class="fas fa-bell"></i> Alerts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="3report.html"><i class="fas fa-edit"></i> Report</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="4relifcenter.html"><i class="fas fa-map-marker-alt"></i> Relief Centers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="5emergency.html"><i class="fas fa-phone"></i> Emergency Contacts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active btn-login" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Auth Section -->
+    <section class="auth-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div class="auth-container">
+              <div class="auth-header">
+                <h1>Create Account</h1>
+              </div>
+              
+              <form id="register-form" class="auth-form">
+                <h2>Join Our Community</h2>
+                <p>Create your account to report and receive alerts about emergencies in your area.</p>
+                
+                <div id="error-message" class="error-message"></div>
+                <div id="success-message" class="success-message"></div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="first-name">First Name</label>
+                      <input type="text" id="first-name" class="form-control" placeholder="Enter first name" required>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="last-name">Last Name</label>
+                      <input type="text" id="last-name" class="form-control" placeholder="Enter last name" required>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="register-email">Email Address</label>
+                  <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="register-email" class="form-control" placeholder="Enter your email" required>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="phone">Phone Number</label>
+                  <div class="input-with-icon">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" id="phone" class="form-control" placeholder="Enter phone number" pattern="[0-9]{10}" inputmode="numeric" maxlength="10" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="selectedRole">Role</label>
+                  <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="roleDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fas fa-user"></i> <span id="roleText">Select your role</span>
+                    </button>
+                    <ul class="dropdown-menu w-100" aria-labelledby="roleDropdown">
+                      <li><a class="dropdown-item" href="#" data-value="Citizen"><i class="fas fa-user"></i> Citizen</a></li>
+                      <li><a class="dropdown-item" href="#" data-value="Emergency Responder"><i class="fas fa-ambulance"></i> Emergency Responder</a></li>
+                      <li><a class="dropdown-item" href="#" data-value="Government Official"><i class="fas fa-gavel"></i> Government Official</a></li>
+                      <li><a class="dropdown-item" href="#" data-value="NGO Worker"><i class="fas fa-hands-helping"></i> NGO Worker</a></li>
+                    </ul>
+                    <input type="hidden" name="userRole" id="selectedRole" required />
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="register-password">Password</label>
+                  <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="register-password" class="form-control" placeholder="Create a password" required>
+                  </div>
+                  <div class="password-strength">
+                    <div class="strength-meter">
+                      <div class="strength-bar"></div>
+                    </div>
+                    <p class="strength-text">Password strength: <span>Weak</span></p>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="confirm-password">Confirm Password</label>
+                  <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirm-password" class="form-control" placeholder="Confirm your password" required>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="location">Location</label>
+                  <div class="input-with-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" id="location" class="form-control" placeholder="Enter your city/area" required>
+                  </div>
+                  <p class="form-help">Your location helps us send relevant disaster alerts for your area.</p>
+                </div>
+                
+                <div class="form-check mb-3">
+                  <input type="checkbox" class="form-check-input" id="terms" required>
+                  <label class="form-check-label" for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-large btn-block">Create Account</button>
+                
+                <div class="auth-alternate">
+                  <p>Already have an account? <a href="login.html">Login</a></p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row footer-content">
+          <div class="col-lg-3 col-md-6 footer-section about">
+            <div class="logo">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Disaster Management</h3>
+            </div>
+            <p>A real-time disaster management system helping communities prepare, respond, and recover.</p>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="2alerts.html">Alerts</a></li>
+              <li><a href="3report.html">Report Disaster</a></li>
+              <li><a href="4relifcenter.html">Relief Centers</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section resources">
+            <h3>Resources</h3>
+            <ul>
+              <li><a href="#">Preparedness Guide</a></li>
+              <li><a href="#">Disaster Recovery</a></li>
+              <li><a href="#">Training Materials</a></li>
+              <li><a href="#">Community Resources</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section contact">
+            <h3>Connect</h3>
+            <ul>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#"> About</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#"> Terms of Service</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <p>&copy; 2025 Disaster Management System. All rights reserved.</p>
+          <p>Made with <i class="fas fa-heart"></i> for community resilience</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Auth utilities -->
+    <script src="../assets/js/auth.js"></script>
+    
+    <script>
+      // API_BASE_URL is already defined in auth.js, so we use it directly
+
+      // Show error message
+      function showError(message) {
+        const errorDiv = document.getElementById('error-message');
+        const successDiv = document.getElementById('success-message');
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        successDiv.style.display = 'none';
+      }
+
+      // Show success message
+      function showSuccess(message) {
+        const errorDiv = document.getElementById('error-message');
+        const successDiv = document.getElementById('success-message');
+        successDiv.textContent = message;
+        successDiv.style.display = 'block';
+        errorDiv.style.display = 'none';
+      }
+
+      // Hide messages
+      function hideMessages() {
+        document.getElementById('error-message').style.display = 'none';
+        document.getElementById('success-message').style.display = 'none';
+      }
+
+      // Role dropdown handler
+      document.querySelectorAll(".dropdown-item").forEach(item => {
+        item.addEventListener("click", function (e) {
+          e.preventDefault();
+          const selectedValue = this.getAttribute("data-value");
+          document.getElementById("roleText").textContent = selectedValue;
+          document.getElementById("selectedRole").value = selectedValue;
+        });
+      });
+
+      // Phone input handler - only allow numbers
+      document.getElementById("phone").addEventListener("input", function (e) {
+        this.value = this.value.replace(/[^0-9]/g, "");
+      });
+
+      // Password strength visualization
+      document.getElementById('register-password').addEventListener('input', function() {
+        const password = this.value;
+        const strengthBar = document.querySelector('.strength-bar');
+        const strengthText = document.querySelector('.strength-text span');
+        
+        if (password.length === 0) {
+          strengthBar.style.width = '0%';
+          strengthBar.style.backgroundColor = '#dc3545';
+          strengthText.textContent = 'Weak';
+          return;
+        }
+        
+        let strength = 0;
+        if (password.length >= 8) strength += 1;
+        if (/[A-Z]/.test(password)) strength += 1;
+        if (/[0-9]/.test(password)) strength += 1;
+        if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+        
+        switch (strength) {
+          case 0:
+            strengthBar.style.width = '25%';
+            strengthBar.style.backgroundColor = '#dc3545';
+            strengthText.textContent = 'Weak';
+            break;
+          case 1:
+            strengthBar.style.width = '50%';
+            strengthBar.style.backgroundColor = '#ffc107';
+            strengthText.textContent = 'Fair';
+            break;
+          case 2:
+            strengthBar.style.width = '75%';
+            strengthBar.style.backgroundColor = '#fd7e14';
+            strengthText.textContent = 'Good';
+            break;
+          case 3:
+            strengthBar.style.width = '90%';
+            strengthBar.style.backgroundColor = '#20c997';
+            strengthText.textContent = 'Strong';
+            break;
+          case 4:
+            strengthBar.style.width = '100%';
+            strengthBar.style.backgroundColor = '#28a745';
+            strengthText.textContent = 'Very Strong';
+            break;
+        }
+      });
+
+      // Handle Register Form Submission
+      document.getElementById('register-form').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Prevent form reload
+        hideMessages();
+
+        const firstName = document.getElementById('first-name').value.trim();
+        const lastName = document.getElementById('last-name').value.trim();
+        const email = document.getElementById('register-email').value.trim();
+        const password = document.getElementById('register-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        const phone = document.getElementById('phone').value.trim();
+        const role = document.getElementById('selectedRole').value;
+        const location = document.getElementById('location').value.trim();
+        const submitButton = this.querySelector('button[type="submit"]');
+
+        // Validate all fields
+        if (!firstName || !lastName || !email || !password || !phone || !role || !location) {
+          showError('Please fill in all fields including role selection');
+          return;
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          showError('Please enter a valid email address');
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showError('Passwords do not match');
+          return;
+        }
+
+        if (password.length < 6) {
+          showError('Password must be at least 6 characters long');
+          return;
+        }
+
+        if (phone.length !== 10) {
+          showError('Phone number must be exactly 10 digits');
+          return;
+        }
+
+        // Disable button and show loading state
+        const originalButtonText = submitButton.innerHTML;
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+
+        try {
+          console.log('Attempting signup:', { firstName, lastName, email, role });
+          const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              firstName,
+              lastName,
+              email,
+              password,
+              phone,
+              role,
+              location
+            })
+          });
+
+          console.log('Response status:', response.status);
+          
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: 'Server error' }));
+            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log('Response data:', data);
+
+          if (data.success && data.token) {
+            // Save token and user data to localStorage
+            saveToken(data.token);
+            if (data.user) {
+              saveUser(data.user);
+            }
+            
+            showSuccess('Registration successful! Redirecting...');
+            updateAuthButton();
+            
+            setTimeout(() => {
+              window.location.href = '../index.html';
+            }, 1000);
+          } else {
+            // Re-enable button on error
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+            showError(data.message || 'Registration failed. Please try again.');
+          }
+        } catch (error) {
+          console.error('Signup error:', error);
+          // Re-enable button on error
+          submitButton.disabled = false;
+          submitButton.innerHTML = originalButtonText;
+          
+          // Better error message
+          if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+            showError('Cannot connect to server. Make sure the backend is running at http://localhost:5000');
+          } else {
+            showError(error.message || 'Network error. Please check if the server is running at http://localhost:5000');
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
