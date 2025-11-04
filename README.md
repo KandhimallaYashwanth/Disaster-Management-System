@@ -1,6 +1,6 @@
 # Disaster Management System
 
-> A full‑stack web application to report disasters, view live alerts, and coordinate response — with secure user authentication and a clean, responsive UI.
+### A full‑stack web application to report disasters, view live alerts, and coordinate response — with secure user authentication and a clean, responsive UI.
 
 ## Project Structure
 
