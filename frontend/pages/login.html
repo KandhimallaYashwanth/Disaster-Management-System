@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Disaster Management System</title>
+    <meta name="description" content="Login to your Disaster Management System account" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/css/6login.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Disaster Management System</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="2alerts.html"><i class="fas fa-bell"></i> Alerts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="3report.html"><i class="fas fa-edit"></i> Report</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="4relifcenter.html"><i class="fas fa-map-marker-alt"></i> Relief Centers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="5emergency.html"><i class="fas fa-phone"></i> Emergency Contacts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active btn-login" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Auth Section -->
+    <section class="auth-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 mx-auto">
+            <div class="auth-container">
+              <div class="auth-header">
+                <h1>Login</h1>
+              </div>
+              
+              <form id="login-form" class="auth-form">
+                <h2>Welcome Back</h2>
+                <p>Log in to access your account and stay updated on emergencies in your area.</p>
+                
+                <div id="error-message" class="error-message"></div>
+                <div id="success-message" class="success-message"></div>
+                
+                <div class="form-group">
+                  <label for="login-email">Email Address</label>
+                  <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="login-email" class="form-control" placeholder="Enter your email" required>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="login-password">Password</label>
+                  <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
+                  </div>
+                </div>
+                
+                <div class="form-options">
+                  <div class="remember-me">
+                    <input type="checkbox" class="form-check-input" id="remember">
+                    <label class="form-check-label" for="remember">Remember me</label>
+                  </div>
+                  <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-large btn-block">Log In</button>
+                
+                <div class="auth-alternate">
+                  <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row footer-content">
+          <div class="col-lg-3 col-md-6 footer-section about">
+            <div class="logo">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Disaster Management</h3>
+            </div>
+            <p>A real-time disaster management system helping communities prepare, respond, and recover.</p>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="2alerts.html">Alerts</a></li>
+              <li><a href="3report.html">Report Disaster</a></li>
+              <li><a href="4relifcenter.html">Relief Centers</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section resources">
+            <h3>Resources</h3>
+            <ul>
+              <li><a href="#">Preparedness Guide</a></li>
+              <li><a href="#">Disaster Recovery</a></li>
+              <li><a href="#">Training Materials</a></li>
+              <li><a href="#">Community Resources</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section contact">
+            <h3>Connect</h3>
+            <ul>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#"> About</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#"> Terms of Service</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <p>&copy; 2025 Disaster Management System. All rights reserved.</p>
+          <p>Made with <i class="fas fa-heart"></i> for community resilience</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Auth utilities -->
+    <script src="../assets/js/auth.js"></script>
+    
+    <script>
+      // API_BASE_URL is already defined in auth.js, so we use it directly
+
+      // Show error message
+      function showError(message) {
+        const errorDiv = document.getElementById('error-message');
+        const successDiv = document.getElementById('success-message');
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        successDiv.style.display = 'none';
+      }
+
+      // Show success message
+      function showSuccess(message) {
+        const errorDiv = document.getElementById('error-message');
+        const successDiv = document.getElementById('success-message');
+        successDiv.textContent = message;
+        successDiv.style.display = 'block';
+        errorDiv.style.display = 'none';
+      }
+
+      // Hide messages
+      function hideMessages() {
+        document.getElementById('error-message').style.display = 'none';
+        document.getElementById('success-message').style.display = 'none';
+      }
+
+      // Handle Login Form Submission
+      document.getElementById('login-form').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Prevent form reload
+        hideMessages();
+
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+        const submitButton = this.querySelector('button[type="submit"]');
+
+        if (!email || !password) {
+          showError('Please fill in all fields');
+          return;
+        }
+
+        // Disable button and show loading state
+        const originalButtonText = submitButton.innerHTML;
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+
+        try {
+          console.log('Attempting login:', email);
+          const response = await fetch(`${API_BASE_URL}/auth/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+          });
+
+          console.log('Response status:', response.status);
+          
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: 'Server error' }));
+            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log('Response data:', data);
+
+          if (data.success && data.token) {
+            // Save token and user data to localStorage
+            saveToken(data.token);
+            if (data.user) {
+              saveUser(data.user);
+            }
+            
+            showSuccess('Login successful! Redirecting...');
+            
+            // Update auth button
+            updateAuthButton();
+            
+            // Redirect to home page after 1 second
+            setTimeout(() => {
+              window.location.href = '../index.html';
+            }, 1000);
+          } else {
+            // Re-enable button on error
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+            showError(data.message || 'Login failed. Please check your credentials and try again.');
+          }
+        } catch (error) {
+          console.error('Login error:', error);
+          // Re-enable button on error
+          submitButton.disabled = false;
+          submitButton.innerHTML = originalButtonText;
+          
+          // Better error message
+          if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+            showError('Cannot connect to server. Make sure the backend is running at http://localhost:5000');
+          } else {
+            showError(error.message || 'Network error. Please check if the server is running at http://localhost:5000');
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
