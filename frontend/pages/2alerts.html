@@ -1,0 +1,708 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Disaster Alerts - Disaster Management System</title>
+    <meta name="description" content="View live disaster alerts and warnings" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/css/2alerts.css" />
+    <style>
+      /* Additional styles for alerts page based on the design image */
+      .search-container {
+        margin: 30px 0;
+        position: relative;
+      }
+      
+      .search-input {
+        width: 100%;
+        padding: 12px 20px;
+        padding-left: 40px;
+        border-radius: 50px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      }
+      
+      .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 13px;
+        color: #8E9196;
+      }
+      
+      .filter-button {
+        padding: 8px 20px;
+        border-radius: 50px;
+        border: 1px solid #e0e0e0;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      }
+      
+      .alert-card-custom {
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 25px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        background-color: white;
+        border: none;
+        border-left: 5px solid transparent;
+      }
+      
+      .alert-card-custom.flood {
+        border-left-color: #3498db;
+      }
+      
+      .alert-card-custom.fire {
+        border-left-color: #e74c3c;
+      }
+      
+      .alert-card-custom.earthquake {
+        border-left-color: #3498db;
+      }
+      
+      .alert-card-custom.cyclone {
+        border-left-color: #3498db;
+      }
+      
+      .alert-card-custom.landslide {
+        border-left-color: #f39c12;
+      }
+      .alert-card-custom.tunnel-collapse {
+        border-left-color: #e74c3c;
+      }
+      
+      .alert-icon-custom {
+        font-size: 20px;
+        margin-right: 10px;
+        color: inherit;
+      }
+      
+      .alert-location {
+        display: flex;
+        align-items: center;
+        color: #8E9196;
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      
+      .alert-location i {
+        margin-right: 5px;
+      }
+      
+      .alert-severity {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 10px;
+      }
+      
+      .alert-severity.high {
+        background-color: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+      }
+      
+      .alert-severity.medium {
+        background-color: rgba(243, 156, 18, 0.1);
+        color: #f39c12;
+      }
+      
+      .alert-severity.low {
+        background-color: rgba(46, 204, 113, 0.1);
+        color: #2ecc71;
+      }
+      
+      .alert-time {
+        display: flex;
+        align-items: center;
+        color: #8E9196;
+        font-size: 14px;
+      }
+      
+      .alert-time i {
+        margin-right: 5px;
+      }
+      
+      .alert-status {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      
+      .alert-status.active {
+        background-color: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+      }
+      
+      .alert-status.monitoring {
+        background-color: rgba(52, 152, 219, 0.1);
+        color: #3498db;
+      }
+      .alert-status.ongoing {
+        background-color: rgb(254, 245, 231);
+        color: #f39c12;
+      }
+      
+      .alert-status.resolved {
+        background-color: rgba(46, 204, 113, 0.1);
+        color: #2ecc71;
+      }
+      
+      .alert-type {
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+      
+      .footer-simple {
+        background-color: white;
+        padding: 40px 0 20px;
+        margin-top: 50px;
+        border-top: 1px solid #e0e0e0;
+      }
+      
+      .footer-logo {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        font-weight: 700;
+        color: #333;
+        font-size: 20px;
+      }
+      
+      .footer-logo i {
+        margin-right: 10px;
+        color: #e74c3c;
+      }
+      
+      .footer-links h5 {
+        font-weight: 600;
+        margin-bottom: 15px;
+        font-size: 16px;
+      }
+      
+      .footer-links ul {
+        list-style: none;
+        padding: 0;
+      }
+      
+      .footer-links li {
+        margin-bottom: 10px;
+      }
+      
+      .footer-links a {
+        color: #6c757d;
+        text-decoration: none;
+      }
+      
+      .footer-links a:hover {
+        color: #3498db;
+      }
+      
+      .footer-bottom {
+        margin-top: 30px;
+        text-align: center;
+        color: #8E9196;
+        font-size: 14px;
+        padding-top: 20px;
+        border-top: 1px solid #f0f0f0;
+      }
+      
+      .footer-bottom .heart {
+        color: #e74c3c;
+      }
+      
+      .navbar-custom {
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 15px 0;
+      }
+      
+      .navbar-brand {
+        font-weight: 700;
+        font-size: 22px;
+        display: flex;
+        align-items: center;
+      }
+      
+      .navbar-brand i {
+        color: #e74c3c;
+        margin-right: 8px;
+        font-size: 24px;
+      }
+      
+      .nav-link {
+        font-weight: 500;
+        color: #333;
+        padding: 8px 15px;
+        border-radius: 4px;
+      }
+      
+      .nav-link.active {
+        color: #3498db;
+      }
+      
+      .nav-link i {
+        margin-right: 5px;
+      }
+      
+      .alert-banner-custom {
+        background-color: #e74c3c;
+        color: white;
+        padding: 10px 0;
+        font-weight: 500;
+      }
+      
+      .alert-banner-custom .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .alert-banner-custom a {
+        color: white;
+        text-decoration: underline;
+      }
+      
+      .close-alert {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      
+      .alerts-page-title {
+        margin: 30px 0 10px;
+        font-weight: 700;
+      }
+      
+      .alerts-page-subtitle {
+        color: #6c757d;
+        margin-bottom: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Alert Banner -->
+    <div class="alert-banner-custom">
+      <div class="container">
+        <p><i class="fas fa-exclamation-triangle"></i> Flood in Chennai • High Alert • 2 hours ago</p>
+        <button class="close-alert"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-exclamation-triangle"></i>
+          Disaster Management System
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="2alerts.html"><i class="fas fa-bell"></i> Alerts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="3report.html"><i class="fas fa-edit"></i> Report</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="4relifcenter.html"><i class="fas fa-map-marker-alt"></i> Relief Centers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="5emergency.html"><i class="fas fa-phone"></i> Emergency Contacts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn-login" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+      <!-- Page Header -->
+      <h1 class="alerts-page-title">Live Disaster Alerts</h1>
+      <p class="alerts-page-subtitle">Stay informed about active disasters and emergencies across the country.</p>
+      
+      <!-- Search and Filter -->
+      <div class="row mb-4">
+        <div class="col-md-9">
+          <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search by location or description...">
+          </div>
+        </div>
+        <div class="col-md-3 d-flex align-items-center justify-content-end">
+          <button class="filter-button">
+            <i class="fas fa-filter"></i>
+            Filters
+            <i class="fas fa-chevron-down"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Alerts Grid -->
+      
+      <div class="row" id="alerts-grid">
+        <!-- Flood Alert -->
+        <div class="col-md-4 d-flex">
+          <div class="card alert-card-custom flood">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div class="alert-type">
+                  <i class="fas fa-water alert-icon-custom text-primary"></i>
+                  Flood
+                  <span class="alert-severity high">High</span>
+                </div>
+              </div>
+              <p class="alert-location">
+                <i class="fas fa-map-marker-alt"></i>
+                Chennai, Tamil Nadu
+              </p>
+              <p class="card-text">Heavy rainfall has caused significant flooding in low-lying areas. Several neighborhoods have been evacuated.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="alert-time">
+                  <i class="far fa-clock"></i>
+                  2 hours ago
+                </div>
+                <span class="alert-status active">Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Fire Alert -->
+        <div class="col-md-4 d-flex">
+          <div class="card alert-card-custom fire">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div class="alert-type">
+                  <i class="fas fa-fire alert-icon-custom text-danger"></i>
+                  Fire
+                  <span class="alert-severity medium">Medium</span>
+                </div>
+              </div>
+              <p class="alert-location">
+                <i class="fas fa-map-marker-alt"></i>
+                Mumbai, Maharashtra
+              </p>
+              <p class="card-text">Industrial area fire reported. Fire services deployed. Residents advised to avoid the area.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="alert-time">
+                  <i class="far fa-clock"></i>
+                  5 hours ago
+                </div>
+                <span class="alert-status active">Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Earthquake Alert -->
+        <div class="col-md-4 d-flex">
+          <div class="card alert-card-custom earthquake">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div class="alert-type">
+                  <i class="fas fa-house-damage alert-icon-custom text-primary"></i>
+                  Earthquake
+                  <span class="alert-severity low">Low</span>
+                </div>
+              </div>
+              <p class="alert-location">
+                <i class="fas fa-map-marker-alt"></i>
+                Delhi NCR
+              </p>
+              <p class="card-text">Minor tremors felt across the region. No significant damage reported. Officials monitoring the situation.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="alert-time">
+                  <i class="far fa-clock"></i>
+                  1 day ago
+                </div>
+                <span class="alert-status monitoring">Monitoring</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Cyclone Alert -->
+        <div class="col-md-4 d-flex">
+          <div class="card alert-card-custom cyclone">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div class="alert-type">
+                  <i class="fas fa-wind alert-icon-custom text-primary"></i>
+                  Cyclone
+                  <span class="alert-severity high">High</span>
+                </div>
+              </div>
+              <p class="alert-location">
+                <i class="fas fa-map-marker-alt"></i>
+                Odisha Coast
+              </p>
+              <p class="card-text">Cyclone approaching eastern coast. Evacuation orders issued for coastal villages. Heavy rainfall expected.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="alert-time">
+                  <i class="far fa-clock"></i>
+                  12 hours ago
+                </div>
+                <span class="alert-status active">Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Landslide Alert -->
+        <div class="col-md-4 d-flex">
+          <div class="card alert-card-custom landslide">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div class="alert-type">
+                  <i class="fas fa-mountain alert-icon-custom text-warning"></i>
+                  Landslide
+                  <span class="alert-severity medium">Medium</span>
+                </div>
+              </div>
+              <p class="alert-location">
+                <i class="fas fa-map-marker-alt"></i>
+                Himachal Pradesh
+              </p>
+              <p class="card-text">Landslide reported on highway after heavy rain. Road closed. Rescue teams deployed.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="alert-time">
+                  <i class="far fa-clock"></i>
+                  3 days ago
+                </div>
+                <span class="alert-status resolved">Resolved</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Tunnel Collapse Alert -->
+<div class="col-md-4 d-flex">
+  <div class="card alert-card-custom tunnel-collapse">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <div class="alert-type">
+          <i class="fas fa-tools alert-icon-custom text-danger"></i>
+          Tunnel Collapse
+          <span class="alert-severity high">High</span>
+        </div>
+      </div>
+      <p class="alert-location">
+        <i class="fas fa-map-marker-alt"></i>
+        Telangana SLBC Project
+      </p>
+      <p class="card-text">A section of the SLBC tunnel collapsed during ongoing work. Rescue operations are underway. Authorities are investigating the cause.</p>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="alert-time">
+          <i class="far fa-clock"></i>
+          2 hours ago
+        </div>
+        <span class="alert-status ongoing">Rescue Ongoing</span> <!-- Styled Status -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+        <!-- Another Flood Alert -->
+        <div class="col-md-4 d-flex">
+          <div class="card alert-card-custom flood">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div class="alert-type">
+                  <i class="fas fa-water alert-icon-custom text-primary"></i>
+                  Flood
+                  <span class="alert-severity high">High</span>
+                </div>
+              </div>
+              <p class="alert-location">
+                <i class="fas fa-map-marker-alt"></i>
+                Assam
+              </p>
+              <p class="card-text">River levels rising after continuous rainfall. Low-lying areas flooded. Relief camps established.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="alert-time">
+                  <i class="far fa-clock"></i>
+                  1 day ago
+                </div>
+                <span class="alert-status active">Active</span>
+              </div>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+    </div>
+
+    
+
+    
+    
+    <!-- Footer -->
+    <footer class="footer-simple">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 mb-4">
+            <div class="footer-logo">
+              <i class="fas fa-exclamation-triangle"></i>
+              Disaster Management
+            </div>
+            <p class="text-muted">A real-time disaster management system helping communities prepare, respond, and recover.</p>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 mb-4 footer-links">
+            <h5>Quick Links</h5>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="2alerts.html">Alerts</a></li>
+              <li><a href="3report.html">Report Disaster</a></li>
+              <li><a href="4relifcenter.html">Relief Centers</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 mb-4 footer-links">
+            <h5>Resources</h5>
+            <ul>
+              <li><a href="#">Preparedness Guide</a></li>
+              <li><a href="#">Disaster Recovery</a></li>
+              <li><a href="#">Training Materials</a></li>
+              <li><a href="#">Community Resources</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 mb-4 footer-links">
+            <h5>Connect</h5>
+            <ul>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#"> About</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#"> Terms of Service</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <p>&copy; 2025 Disaster Management System. All rights reserved.</p>
+          <p>Made with <i class="fas fa-heart heart"></i> for community resilience</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Auth utilities -->
+    <script src="../assets/js/auth.js"></script>
+    
+    <script>
+      // Simple script to close the alert banner
+      document.querySelector('.close-alert').addEventListener('click', function() {
+        document.querySelector('.alert-banner-custom').style.display = 'none';
+      });
+      
+      // Fetch and render user-reported alerts
+      function severityClass(sev) {
+        switch ((sev || '').toLowerCase()) {
+          case 'high': return 'high';
+          case 'medium': return 'medium';
+          case 'low': return 'low';
+          case 'critical': return 'high';
+          default: return 'medium';
+        }
+      }
+
+      function typeClass(type) {
+        const t = (type || '').toLowerCase();
+        if (t.includes('flood')) return 'flood';
+        if (t.includes('fire')) return 'fire';
+        if (t.includes('earth')) return 'earthquake';
+        if (t.includes('cyclone') || t.includes('wind')) return 'cyclone';
+        if (t.includes('land')) return 'landslide';
+        return 'flood';
+      }
+
+      function timeAgo(dateStr) {
+        const d = new Date(dateStr);
+        const diffMs = Date.now() - d.getTime();
+        const mins = Math.floor(diffMs / 60000);
+        if (mins < 60) return `${mins} min ago`;
+        const hrs = Math.floor(mins / 60);
+        if (hrs < 24) return `${hrs} hours ago`;
+        const days = Math.floor(hrs / 24);
+        return `${days} day${days>1?'s':''} ago`;
+      }
+
+      async function loadReports() {
+        try {
+          const resp = await fetch(`${API_BASE_URL}/reports`);
+          const data = await resp.json();
+          if (!data.success) return;
+          const grid = document.getElementById('alerts-grid');
+          data.reports.forEach(r => {
+            const sevCls = severityClass(r.severity);
+            const cardCls = typeClass(r.type);
+            const locationText = `${r.city || ''}${r.state ? (r.city ? ', ' : '') + r.state : ''}` || r.address || 'Unknown';
+            const status = (r.status || 'Active').toLowerCase();
+            const statusCls = status.includes('resolve') ? 'resolved' : (status.includes('monitor') ? 'monitoring' : 'active');
+            const el = document.createElement('div');
+            el.className = 'col-md-4 d-flex';
+            el.innerHTML = `
+              <div class="card alert-card-custom ${cardCls}">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div class="alert-type">
+                      <i class="fas fa-exclamation-circle alert-icon-custom"></i>
+                      ${r.title || r.type}
+                      <span class="alert-severity ${sevCls}">${(r.severity||'').charAt(0).toUpperCase()+ (r.severity||'').slice(1)}</span>
+                    </div>
+                  </div>
+                  <p class="alert-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    ${locationText}
+                  </p>
+                  <p class="card-text">${(r.description || '').substring(0, 180)}${(r.description||'').length>180?'...':''}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="alert-time">
+                      <i class="far fa-clock"></i>
+                      ${timeAgo(r.createdAt)}
+                    </div>
+                    <span class="alert-status ${statusCls}">${r.status || 'Active'}</span>
+                  </div>
+                </div>
+              </div>`;
+            grid.appendChild(el);
+          });
+        } catch (e) {
+          console.error('Failed to load reports', e);
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', loadReports);
+    </script>
+  </body>
+</html>
