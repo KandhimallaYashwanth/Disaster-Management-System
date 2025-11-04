@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report Disaster - Disaster Management System</title>
+    <meta name="description" content="Report a disaster or emergency situation" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/css/3report.css" />
+    <!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <style>
+      /* Additional styles specifically for report page */
+      .report-section {
+        padding: 60px 0;
+        background-color: var(--light-gray);
+      }
+      
+      .report-container {
+        background-color: white;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--box-shadow);
+      }
+      
+      .emergency-notice {
+        background-color: rgba(231, 76, 60, 0.1);
+        padding: 15px;
+        border-radius: var(--border-radius);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: flex-start;
+      }
+      
+      .emergency-notice i {
+        color: var(--danger-color);
+        font-size: 1.5rem;
+        margin-right: 15px;
+        margin-top: 2px;
+      }
+      
+      .emergency-notice p {
+        margin: 0;
+      }
+      
+      .report-form {
+        padding: 30px;
+      }
+      
+      .form-section {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--light-gray);
+      }
+      
+      .form-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+      
+      .form-section h3 {
+        margin-bottom: 20px;
+        font-size: 1.3rem;
+        color: var(--primary-color);
+      }
+      
+      .form-group {
+        margin-bottom: 20px;
+      }
+      
+      .form-group label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+      }
+      
+      .form-group .form-text {
+        font-size: 0.85rem;
+        color: var(--gray-text);
+      }
+      
+      .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+      }
+      
+      .form-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      
+      .form-row .form-group {
+        flex: 1;
+        margin-bottom: 0;
+      }
+      
+      .map-container {
+        height: 250px;
+        background-color: #e9ecef;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        position: relative;
+      }
+      
+      .map-placeholder {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      
+      .map-placeholder i {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+      }
+      
+      .map-placeholder p {
+        margin: 0;
+        color: var(--gray-text);
+      }
+      
+      .file-upload {
+        position: relative;
+      }
+      
+      .file-upload input[type="file"] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 2;
+      }
+      
+      .upload-placeholder {
+        border: 2px dashed #ced4da;
+        border-radius: var(--border-radius);
+        padding: 30px;
+        text-align: center;
+        transition: var(--transition);
+      }
+      
+      .upload-placeholder i {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+      }
+      
+      .upload-placeholder p {
+        margin-bottom: 5px;
+        color: var(--dark-text);
+      }
+      
+      .upload-placeholder span {
+        font-size: 0.85rem;
+        color: var(--gray-text);
+      }
+      
+      .file-upload:hover .upload-placeholder {
+        border-color: var(--primary-color);
+      }
+      
+      .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .checkbox-group input[type="checkbox"] {
+        margin-top: 5px;
+      }
+      
+      .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+      }
+      
+      .btn-large {
+        padding: 12px 30px;
+      }
+      
+      @media (max-width: 767px) {
+        .form-row {
+          flex-direction: column;
+          gap: 20px;
+        }
+        
+        .form-actions {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Alert Banner -->
+    <div class="alert-banner">
+      <div class="container">
+        <p><i class="fas fa-exclamation-triangle"></i> Flood in Chennai • High Alert • 2 hours ago</p>
+        <button class="close-alert"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Disaster Management System</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="2alerts.html"><i class="fas fa-bell"></i> Alerts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="3report.html"><i class="fas fa-edit"></i> Report</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="4relifcenter.html"><i class="fas fa-map-marker-alt"></i> Relief Centers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="5emergency.html"><i class="fas fa-phone"></i> Emergency Contacts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn-login" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Report Section -->
+    <section class="report-section">
+      <div class="container">
+        <h1 class="section-title">Report a Disaster</h1>
+        <p class="section-intro">Submit information about a disaster or emergency situation in your area. Your report helps us coordinate response efforts effectively.</p>
+        
+        <div class="report-container">
+          <form class="report-form" id="report-form">
+            <div class="emergency-notice">
+              <i class="fas fa-exclamation-circle"></i>
+              <p><strong>For immediate emergency assistance, call 112.</strong> Use this form only to report non-life-threatening situations or after contacting emergency services.</p>
+            </div>
+            
+            <div class="form-section">
+              <h3>Disaster Information</h3>
+              
+              <div class="form-group">
+                <label for="disaster-type">Disaster Type*</label>
+                <select id="disaster-type" class="form-select" required>
+                  <option value="" disabled selected>Select disaster type</option>
+                  <option value="flood">Flood</option>
+                  <option value="fire">Fire</option>
+                  <option value="earthquake">Earthquake</option>
+                  <option value="cyclone">Cyclone</option>
+                  <option value="landslide">Landslide</option>
+                  <option value="other">Other (Please specify)</option>
+                </select>
+              </div>
+              
+              <div class="form-group" id="other-disaster-group" style="display: none;">
+                <label for="other-disaster">Specify Disaster Type*</label>
+                <input type="text" id="other-disaster" class="form-control" placeholder="Enter disaster type">
+              </div>
+              
+              <div class="form-group">
+                <label for="severity">Severity*</label>
+                <select id="severity" class="form-select" required>
+                  <option value="" disabled selected>Select severity level</option>
+                  <option value="low">Low - Minor impact, no immediate danger</option>
+                  <option value="medium">Medium - Moderate impact, potential risks</option>
+                  <option value="high">High - Significant impact, immediate attention needed</option>
+                  <option value="critical">Critical - Severe impact, life-threatening</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="incident-title">Incident Title*</label>
+                <input type="text" id="incident-title" class="form-control" placeholder="Brief title describing the incident" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="incident-description">Description*</label>
+                <textarea id="incident-description" class="form-control" rows="4" placeholder="Provide details about the situation, extent of damage, and any immediate needs" required></textarea>
+              </div>
+            </div>
+            
+            <div class="form-section">
+              <h3>Location Information</h3>
+              
+              <div class="form-group">
+                <label for="address">Address/Landmark*</label>
+                <input type="text" id="address" class="form-control" placeholder="Enter specific address or landmark" required>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="city">City/Town*</label>
+                    <input type="text" id="city" class="form-control" placeholder="Enter city or town" required>
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="state">State*</label>
+                    <input type="text" id="state" class="form-control" placeholder="Enter state" required>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="pincode">PIN Code</label>
+                <input 
+                  type="text" 
+                  id="pincode" 
+                  class="form-control" 
+                  placeholder="Enter PIN code"
+                  maxlength="6"
+                  inputmode="numeric"
+                  required
+                >
+              </div>
+              
+              
+              <div class="form-group">
+                <label>Map Location</label>
+                <div class="map-container" id="reportMap">
+                  <div class="map-placeholder">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>Click here to select location on map</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-section">
+              <h3>Media Upload</h3>
+              
+              <div class="form-group file-upload">
+                <label for="file-upload">Upload Images/Videos</label>
+                <input type="file" id="file-upload" multiple accept="image/*,video/*">
+                <div class="upload-placeholder">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <p>Drag and drop files here or click to browse</p>
+                  <span>Maximum 5 files (10MB each)</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-section">
+              <h3>Contact Information</h3>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="Enter your name">
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="phone">Phone Number*</label>
+                    <input type="tel" id="phone" class="form-control" placeholder="Enter phone number" required>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" class="form-control" placeholder="Enter email address">
+              </div>
+              
+              <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="anonymous">
+                <label class="form-check-label" for="anonymous">Submit anonymously</label>
+              </div>
+              
+              <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="confirm" required>
+                <label class="form-check-label" for="confirm">I confirm this information is accurate to the best of my knowledge*</label>
+              </div>
+            </div>
+            
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-large" id="submit-report-btn">Submit Report</button>
+              <button type="reset" class="btn btn-outline-secondary btn-large">Clear Form</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row footer-content">
+          <div class="col-lg-3 col-md-6 footer-section about">
+            <div class="logo">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Disaster Management</h3>
+            </div>
+            <p>A real-time disaster management system helping communities prepare, respond, and recover.</p>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="2alerts.html">Alerts</a></li>
+              <li><a href="3report.html">Report Disaster</a></li>
+              <li><a href="4relifcenter.html">Relief Centers</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section resources">
+            <h3>Resources</h3>
+            <ul>
+              <li><a href="#">Preparedness Guide</a></li>
+              <li><a href="#">Disaster Recovery</a></li>
+              <li><a href="#">Training Materials</a></li>
+              <li><a href="#">Community Resources</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 footer-section contact">
+            <h3>Connect</h3>
+            <ul>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#"> About</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#"> Terms of Service</a></li>
+              </ul>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <p>&copy; 2025 DisasterAlert. All rights reserved.</p>
+          <p>Made with <i class="fas fa-heart"></i> for community resilience</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Auth utilities -->
+    <script src="../assets/js/auth.js"></script>
+    
+    <script>
+      // Script to show/hide other disaster type field
+      document.getElementById('disaster-type').addEventListener('change', function() {
+        const otherGroup = document.getElementById('other-disaster-group');
+        if (this.value === 'other') {
+          otherGroup.style.display = 'block';
+        } else {
+          otherGroup.style.display = 'none';
+        }
+      });
+// Simple script to close the alert banner
+      document.querySelector('.close-alert').addEventListener('click', function() {
+        document.querySelector('.alert-banner').style.display = 'none';
+      });
+      // Submit report to backend
+      document.getElementById('report-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submit-report-btn');
+        const original = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+        const typeSel = document.getElementById('disaster-type');
+        const type = typeSel.value === 'other' ? (document.getElementById('other-disaster').value || 'other') : typeSel.value;
+        const severity = document.getElementById('severity').value;
+        const title = document.getElementById('incident-title').value.trim();
+        const description = document.getElementById('incident-description').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const state = document.getElementById('state').value.trim();
+        const pincode = document.getElementById('pincode').value.trim();
+        const contactName = document.getElementById('name').value.trim();
+        const contactPhone = document.getElementById('phone').value.trim();
+        const contactEmail = document.getElementById('email').value.trim();
+        const anonymous = document.getElementById('anonymous').checked;
+
+        if (!type || !severity || !title || !description || !address || !city || !state || !contactPhone) {
+          alert('Please fill all required fields.');
+          btn.disabled = false; btn.innerHTML = original; return;
+        }
+
+        try {
+          const resp = await fetch(`${API_BASE_URL}/reports`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type, severity, title, description,
+              address, city, state, pincode,
+              contactName, contactPhone, contactEmail, anonymous
+            })
+          });
+          if (!resp.ok) {
+            const err = await resp.json().catch(() => ({ message: 'Failed to submit report' }));
+            throw new Error(err.message || 'Failed to submit report');
+          }
+          alert('Report submitted successfully! Thank you for helping your community.');
+          // Redirect to alerts page to see it listed
+          window.location.href = '2alerts.html';
+        } catch (err) {
+          console.error('Report submit error:', err);
+          alert(err.message || 'Network error. Please try again.');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = original;
+        }
+      });
+    </script>
+    <!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- Your custom script to initialize map -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const placeholder = document.querySelector(".map-placeholder");
+
+    placeholder.addEventListener("click", function () {
+      placeholder.style.display = "none";
+
+      const mapDiv = document.createElement("div");
+      mapDiv.setAttribute("id", "reportMap");
+      mapDiv.style.height = "100%";
+      document.querySelector(".map-container").appendChild(mapDiv);
+
+      const map = L.map("reportMap", {
+  minZoom: 1,
+  maxZoom: 18,
+
+}).setView([17.3457, 78.5522], 14);
+
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      let marker;
+
+      map.on("click", function (e) {
+        if (marker) {
+          marker.setLatLng(e.latlng);
+        } else {
+          marker = L.marker(e.latlng).addTo(map);
+        }
+
+        // You can store these lat/lng in hidden inputs
+        console.log("Selected Location:", e.latlng.lat, e.latlng.lng);
+      });
+    });
+  });
+</script>
+<script>
+  const pinInput = document.getElementById("pincode");
+
+  pinInput.addEventListener("input", function () {
+    // Remove any non-digit characters and trim to 6 digits
+    this.value = this.value.replace(/\D/g, '').slice(0, 6);
+  });
+</script>
+
+
+  </body>
+</html>
