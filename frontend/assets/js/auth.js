@@ -1,5 +1,10 @@
 // Authentication utilities
-const API_BASE_URL = 'http://localhost:5000/api';
+// Automatically detect environment and use appropriate API URL
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+// Replace with your deployed backend URL (e.g., 'https://your-backend.herokuapp.com/api' or 'https://your-backend.render.com/api')
+const PRODUCTION_API_URL = 'https://your-backend-url.com/api'; // TODO: Replace with your actual deployed backend URL
+
+const API_BASE_URL = isLocalhost ? 'http://localhost:5000/api' : PRODUCTION_API_URL;
 
 // Get token from localStorage
 function getToken() {
