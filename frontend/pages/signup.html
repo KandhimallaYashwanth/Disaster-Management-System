@@ -409,9 +409,9 @@
           
           // Better error message
           if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-            showError('Cannot connect to server. Make sure the backend is running at http://localhost:5000');
+            showError('Cannot connect to server. Please check your internet connection and try again.');
           } else {
-            showError(error.message || 'Network error. Please check if the server is running at http://localhost:5000');
+            showError(error.message || 'Network error. Please try again later.');
           }
         }
       });
