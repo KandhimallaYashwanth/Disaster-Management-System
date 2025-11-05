@@ -3,24 +3,22 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-// Check required environment variables
+// Validate environment variables
 if (!process.env.MONGO_URI) {
   console.error('❌ ERROR: MONGO_URI is not set in .env file');
-  console.error('Please create a .env file with: MONGO_URI=your_connection_string');
   process.exit(1);
 }
 
 if (!process.env.JWT_SECRET) {
   console.error('❌ ERROR: JWT_SECRET is not set in .env file');
-  console.error('Please add JWT_SECRET=your_secret_key to your .env file');
   process.exit(1);
 }
 
 const app = express();
 
-// Middleware - Enhanced CORS configuration (allows all origins for development)
+// Middleware - CORS + JSON parsing
 app.use(cors({
-  origin: '*', // Allow all origins for development
+  origin: '*',
   credentials: false,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -34,34 +32,29 @@ const reportRoutes = require('./routes/reportRoutes');
 app.use('/api/auth', authRoutes);
 app.use('/api/reports', reportRoutes);
 
-// Health check endpoint
+// Health check
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    success: true, 
+  res.json({
+    success: true,
     message: 'Server is running',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
-// Connect to MongoDB Atlas
+// MongoDB Connection
 console.log('🔌 Attempting to connect to MongoDB Atlas...');
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => {
-  console.log('✅ Connected to MongoDB Atlas successfully');
-  console.log('📊 Database ready for user authentication');
-})
-.catch((error) => {
-  console.error('❌ MongoDB connection error:', error.message);
-  console.error('⚠️  Make sure MONGO_URI is set correctly in your .env file');
-  process.exit(1);
-});
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('✅ Connected to MongoDB Atlas successfully');
+  })
+  .catch((error) => {
+    console.error('❌ MongoDB connection error:', error.message);
+    process.exit(1);
+  });
 
-// Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📍 Health check: http://localhost:${PORT}/api/health`);
+// ✅ Start server (Render-compatible)
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running and accessible at port ${PORT}`);
+  console.log(`📍 Health check endpoint: /api/health`);
 });
