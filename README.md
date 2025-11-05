@@ -2,6 +2,15 @@
 
 ### A full‑stack web application to report disasters, view live alerts, and coordinate response — with secure user authentication and a clean, responsive UI.
 
+#### 🌐 Live Website
+
+[Disaster Management System](https://disaster-management-systemm.netlify.app)
+
+#### ⚙️ Backend API
+
+[Disaster Management API](https://disaster-management-system-p3rp.onrender.com)
+
+
 ## Project Structure
 
 ```
