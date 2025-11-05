@@ -40,6 +40,11 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+// Root route - friendly welcome message
+app.get('/', (req, res) => {
+  res.send('🌍 Disaster Management System backend is live and running successfully on Render!');
+});
+
 
 // MongoDB Connection
 console.log('🔌 Attempting to connect to MongoDB Atlas...');
